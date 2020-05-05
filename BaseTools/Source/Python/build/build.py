@@ -1256,6 +1256,10 @@ class Build():
 
         # run
         if Target == 'run':
+            RunDir = os.path.normpath(os.path.join(AutoGenObject.BuildDir, GlobalData.gGlobalDefines['ARCH']))
+            Command = '.\WinHost'
+            os.chdir(RunDir)
+            LaunchCommand(Command, RunDir)
             return True
 
         # build modules
