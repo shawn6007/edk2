@@ -1,0 +1,33 @@
+///** @file
+//
+//  Front page formset.
+//
+//  Copyright (c) 2007 - 2015, Intel Corporation. All rights reserved.<BR>
+//  SPDX-License-Identifier: BSD-2-Clause-Patent
+//
+//**/
+
+#define FORMSET_GUID  { 0x9e0c30bc, 0x3f06, 0x4ba6, 0x82, 0x88, 0x9, 0x17, 0x9b, 0x85, 0x5d, 0xcb }
+
+#define FRONT_PAGE_FORM_ID             0x1000
+
+#define LABEL_FRANTPAGE_INFORMATION    0x1000
+#define LABEL_END                      0xffff
+
+formset
+  guid     = FORMSET_GUID,
+  title    = STRING_TOKEN(STR_SHAWN_FRONT_PAGE_TITLE),
+  help     = STRING_TOKEN(STR_SHAWN_FRONT_PAGE_TITLE),
+  classguid = FORMSET_GUID,
+
+  form formid = FRONT_PAGE_FORM_ID,
+       title  = STRING_TOKEN(STR_SHAWN_FRONT_PAGE_TITLE);
+
+    banner
+      title = STRING_TOKEN(STR_SHAWN_FRONT_PAGE_COMPUTER_MODEL),
+      line  1,
+      align left;
+
+  endform;
+
+endformset;

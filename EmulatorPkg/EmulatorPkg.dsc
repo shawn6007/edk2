@@ -408,7 +408,8 @@
       gEfiShellPkgTokenSpaceGuid.PcdShellLibAutoInitialize|FALSE
       gEfiMdePkgTokenSpaceGuid.PcdUefiLibMaxPrintBufferSize|8000
   }
-
+  EmulatorPkg\ShawnUi\ShawnUi.inf
+  EmulatorPkg\ShawnHii\ShawnHii\ShawnHii.inf
 !endif
 
 !include NetworkPkg/Network.dsc.inc

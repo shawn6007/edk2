@@ -1,0 +1,60 @@
+## @file
+# A DXE driver to produce EFI_WIN_NT_THUNK_PROTOCOL
+#
+# EFI_WIN_NT_THUNK_PROTOCOL is a table of pointers to various Windows APIs used by various drivers to accomplish certain task in an NT32 emulator.
+# Copyright (c) 2006 - 2010, Intel Corporation. All rights reserved.<BR>
+#
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution. The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = ShawnUi
+  MODULE_UNI_FILE                = ShawnUi.uni  
+  FILE_GUID                      = 1C95A916-A006-11d4-BCFA-0080C73C8882
+  MODULE_TYPE                    = UEFI_APPLICATION
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = ShawnUiEntryPoint
+
+#
+# The following information is for reference only and not required by the build tools.
+#
+#  VALID_ARCHITECTURES           = IA32
+#
+
+[Sources]
+  ShawnUi.h
+  ShawnUi.c
+  ShawnUi.uni    
+  ShawnPageVfr.vfr
+
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec  
+  EmulatorPkg/EmulatorPkg.dec
+  
+
+[LibraryClasses]
+  UefiApplicationEntryPoint
+  UefiLib
+  UefiRuntimeServicesTableLib
+  UefiBootServicesTableLib
+  UefiHiiServicesLib
+  HiiLib
+    
+
+[Protocols]
+  gEfiSimpleTextInProtocolGuid
+  gEfiSimpleTextOutProtocolGuid
+  gEfiHiiConfigAccessProtocolGuid
+  gEfiFormBrowser2ProtocolGuid
+
+
