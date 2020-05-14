@@ -29,6 +29,7 @@ Abstract:
 #include <Protocol/HiiConfigAccess.h>
 #include <Library/HiiLib.h>
 #include <Library/UefiHiiLib/InternalHiiLib.h>
+#include <Library/DebugLib.h>
 
 EFI_STATUS
 EFIAPI
@@ -37,7 +38,8 @@ ShawnUiEntryPoint (
   IN EFI_SYSTEM_TABLE                      *SystemTable
   )
 {
-  EFI_HII_HANDLE                     HiiHandle;
+  EFI_HII_HANDLE                     HiiHandle[2];
+  EFI_HII_HANDLE                     SetupHiiHandle;
   EFI_STATUS                         Status;
   EFI_GRAPHICS_OUTPUT_PROTOCOL       *GraphicsOutput;
   EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL    *SimpleTextOut;
@@ -49,6 +51,10 @@ ShawnUiEntryPoint (
   EFI_GUID   mMainFrontPageGuid      = FORMSET_MAIN_GUID;
   EFI_GUID   mAdvancedFrontPageGuid      = FORMSET_ADVANCED_GUID;
   EFI_BROWSER_ACTION_REQUEST  ActionRequest;
+
+  EFI_INPUT_KEY                Key;
+  UINTN             EventIndex;
+
   Status = EFI_UNSUPPORTED;
   //
   // After the console is ready, get current video resolution
@@ -99,7 +105,7 @@ ShawnUiEntryPoint (
   //
   // Publish our HII data
   //
-  HiiHandle = HiiAddPackages (
+  HiiHandle[0] = HiiAddPackages (
                               &mMainFrontPageGuid,
                               ImageHandle,
                               ShawnPageVfrBin,
@@ -107,7 +113,7 @@ ShawnUiEntryPoint (
                               NULL
                               );
 
-  HiiHandle = HiiAddPackages (
+  HiiHandle[1] = HiiAddPackages (
                               &mAdvancedFrontPageGuid,
                               ImageHandle,
                               ShawnAdvancedPageVfrBin,
@@ -115,20 +121,51 @@ ShawnUiEntryPoint (
                               NULL
                               );
   //ASSERT (HiiHandle != NULL);                                  
-  ActionRequest = EFI_BROWSER_ACTION_REQUEST_RESET;
-  Status = FormBrowser2->SendForm (
-                            FormBrowser2,
-                            &HiiHandle,
-                            2,
-                            &mClassFrontPageGuid,
-                            0,
-                            NULL,
-                            &ActionRequest
-                            );
+  //ActionRequest = EFI_BROWSER_ACTION_REQUEST_RESET;
+  //DEBUG ((DEBUG_INFO, "Ready send broswer form\n"));  
+  //Status = FormBrowser2->SendForm (
+  //                          FormBrowser2,
+  //                          &HiiHandle[0],
+  //                          1,
+  //                          &mClassFrontPageGuid,
+  //                          0,
+  //                          NULL,
+  //                          &ActionRequest
+  //                          );
+  SetupHiiHandle = HiiHandle[0];
+
+  do {
+    Status = FormBrowser2->SendForm (
+                          FormBrowser2,
+                          &SetupHiiHandle,
+                          1,
+                          &mClassFrontPageGuid,
+                          0,
+                          NULL,
+                          &ActionRequest
+                          );
+    DEBUG ((DEBUG_INFO, "while loop\n"));
+    DEBUG ((DEBUG_INFO, "Ready to wait for key event\n"));
+    gBS->WaitForEvent (1, &gST->ConIn->WaitForKey, &EventIndex);
+    DEBUG ((DEBUG_INFO, "Finish key event\n"));
+    Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
+    DEBUG ((DEBUG_INFO, "Read Key stroke status %r, key %d\n", Status, Key.ScanCode));
+
+    switch (Key.ScanCode)
+    {
+    case SCAN_RIGHT:
+        SetupHiiHandle = HiiHandle[1];
+      break;
+    case SCAN_LEFT:
+        SetupHiiHandle = HiiHandle[0];
+      break;
+
+    default:
+      break;
+    }
 
 
-
-
+  } while (TRUE);
   return Status;
 }
 
