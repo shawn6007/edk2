@@ -24,6 +24,7 @@ Abstract:
 **/
 
 #include "ShawnUi.h"
+#include "ShawnSetup.h"
 #include <Protocol/SimpleTextOut.h>
 #include <Protocol/HiiConfigAccess.h>
 #include <Library/HiiLib.h>
@@ -44,7 +45,9 @@ ShawnUiEntryPoint (
   //UINTN                              BootTextRow;
   EFI_FORM_BROWSER2_PROTOCOL      *FormBrowser2;
   //EFI_HANDLE                      DriverHandle;
-  EFI_GUID   mFrontPageGuid      = SHAWN_FRONT_PAGE_FORMSET_GUID;
+  EFI_GUID   mClassFrontPageGuid      = SETUP_UTILITY_FORMSET_CLASS_GUID;
+  EFI_GUID   mMainFrontPageGuid      = FORMSET_MAIN_GUID;
+  EFI_GUID   mAdvancedFrontPageGuid      = FORMSET_ADVANCED_GUID;
   EFI_BROWSER_ACTION_REQUEST  ActionRequest;
   Status = EFI_UNSUPPORTED;
   //
@@ -97,9 +100,17 @@ ShawnUiEntryPoint (
   // Publish our HII data
   //
   HiiHandle = HiiAddPackages (
-                              &mFrontPageGuid,
+                              &mMainFrontPageGuid,
                               ImageHandle,
                               ShawnPageVfrBin,
+                              ShawnUiStrings,
+                              NULL
+                              );
+
+  HiiHandle = HiiAddPackages (
+                              &mAdvancedFrontPageGuid,
+                              ImageHandle,
+                              ShawnAdvancedPageVfrBin,
                               ShawnUiStrings,
                               NULL
                               );
@@ -108,8 +119,8 @@ ShawnUiEntryPoint (
   Status = FormBrowser2->SendForm (
                             FormBrowser2,
                             &HiiHandle,
-                            1,
-                            &mFrontPageGuid,
+                            2,
+                            &mClassFrontPageGuid,
                             0,
                             NULL,
                             &ActionRequest

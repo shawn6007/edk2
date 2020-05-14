@@ -13,5 +13,6 @@
 #langdef   en    "Standard English"
 
 #string STR_SHAWN_FRONT_PAGE_TITLE           #language en-US  "Shawn Front Page"
+#string STR_SHAWN_ADVANCED_FRONT_PAGE_TITLE           #language en-US  "Shawn Advanced"
 #string STR_SHAWN_FRONT_PAGE_COMPUTER_MODEL           #language en-US  "Shawn COMPUTER_MODEL"
 
