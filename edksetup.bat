@@ -38,6 +38,7 @@ if %WORKSPACE% == %CD% (
 @REM set new workspace
 if not defined WORKSPACE (
   set WORKSPACE=%CD%
+  set PYTHON_HOME=C:\Python27
 )
 
 :ParseArgs
